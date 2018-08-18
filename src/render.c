@@ -14,8 +14,8 @@
 
 static void	drawMapPosition(t_game *game, float x1, float y1)
 {
-	int x2 = cos(game->plr->dir) * 10 + x1;
-	int y2 = sin(game->plr->dir) * 10 + y1;
+	int x2 = game->plr->dirx * 6 + x1;
+	int y2 = game->plr->diry * 6 + y1;
 	SDL_SetRenderDrawColor(game->win->ren, 255, 255, 255, 255);
 	SDL_RenderDrawLine(game->win->ren, x1, y1, x2, y2);
 }
@@ -28,7 +28,7 @@ static void	draw_map(t_game *game)
 
 	i = 0;
 	j = 0;
-	scale = 10;
+	scale = 6;
 	SDL_SetRenderDrawColor(game->win->ren, 0, 0, 0, 255);
 	SDL_Rect rect;
 	i = 0;
@@ -51,6 +51,8 @@ static void	draw_map(t_game *game)
 					SDL_SetRenderDrawColor(game->win->ren, 0, 255, 0, 255);
 				else if (game->map->map[i][j] == 4)
 					SDL_SetRenderDrawColor(game->win->ren, 255, 0, 255, 255);
+				else
+					SDL_SetRenderDrawColor(game->win->ren, 255, 255, 0, 255);
 				SDL_RenderDrawRect(game->win->ren, &rect);
 			}
 			j++;
@@ -71,7 +73,7 @@ void		renderState(t_game *game)
 	int		wallEnd;
 	SDL_Colour	colour;
 
-	// raycasting loop
+	//raycasting loop
 	x = 0;
 	while (x < game->win->w)
 	{
@@ -79,34 +81,31 @@ void		renderState(t_game *game)
 		game->plr->ix = (int)game->plr->x;
 		game->plr->iy = (int)game->plr->y;
 		// get ray direction
-		game->ray->dir = atan(2 * x / (float)game->win->w - 1 / game->plr->s) + game->plr->dir;
+		game->ray->dirx = game->plr->dirx + game->plr->sx * (2 * x / (float)game->win->w - 1);
+		game->ray->diry = game->plr->diry + game->plr->sy * (2 * x / (float)game->win->w - 1);
 		// get delta distance
-		game->ray->dx = fabs(1.0 / cos(game->ray->dir));
-		game->ray->dy = fabs(1.0 / sin(game->ray->dir));
-		if (game->ray->dir > 2 * M_PI)
-			game->ray->dir = 0;
-		else if (game->ray->dir < 0)
-			game->ray->dir = 2 * M_PI;
+		game->ray->dx = fabs(1.0 / game->ray->dirx);
+		game->ray->dy = fabs(1.0 / game->ray->diry);
 		// set intersect and step amount
-		if (game->ray->dir >= 1.5708 && game->ray->dir <= 4.71239)
+		if (game->ray->dirx < 0)
 		{
 			game->ray->sx = -1;
-			game->ray->dx = (game->plr->x - game->plr->ix) * game->ray->dx;
+			game->ray->ix = (game->plr->x - game->plr->ix) * game->ray->dx;
 		}
 		else
 		{
 			game->ray->sx = 1;
-			game->ray->dx = (game->plr->ix + 1.0 - game->plr->x) * game->ray->dx;
+			game->ray->ix = (game->plr->ix + 1.0 - game->plr->x) * game->ray->dx;
 		}
-		if (game->ray->dir >= 0 && game->ray->dir <= 3.14159)
+		if (game->ray->diry < 0)
 		{
 			game->ray->sy = -1;
-			game->ray->dx = (game->plr->y - game->plr->iy) * game->ray->dy;
+			game->ray->iy = (game->plr->y - game->plr->iy) * game->ray->dy;
 		}
 		else
 		{
 			game->ray->sy = 1;
-			game->ray->dx = (game->plr->iy + 1.0 - game->plr->x) * game->ray->dy;
+			game->ray->iy = (game->plr->iy + 1.0 - game->plr->y) * game->ray->dy;
 		}
 		// DDA
 		hit = 0;
@@ -133,12 +132,11 @@ void		renderState(t_game *game)
 		}
 		// calculate distance from wall
 		if (side == 0)
-			game->ray->p = (game->plr->ix - game->plr->x + (1 - game->ray->sx) / 2) / cos(game->ray->dir);
+			game->ray->p = (game->plr->ix - game->plr->x + (1 - game->ray->sx) / 2) / game->ray->dirx;
 		else
-			game->ray->p = (game->plr->iy - game->plr->y + (1 - game->ray->sy) / 2) / sin(game->ray->dir);
+			game->ray->p = (game->plr->iy - game->plr->y + (1 - game->ray->sy) / 2) / game->ray->diry;
 		// calculate height of wall
 		wallHeight = (int)(game->win->h / game->ray->p);
-		printf("%f, %d\n", game->ray->p, wallHeight);
 		// calculate lowest and heighest pixel of wall
 		wallStart = -wallHeight / 2 + game->win->h / 2;
 		if (wallStart < 0)
@@ -186,10 +184,10 @@ void		renderState(t_game *game)
 			colour.b /= 2;
 		}
 		SDL_SetRenderDrawColor(game->win->ren, colour.r, colour.g, colour.b, colour.a);
-		// draw pixels as vertical line
+		//draw pixels as vertical line
 		SDL_RenderDrawLine(game->win->ren, x, wallStart, x, wallEnd);
 		x++;
 	}
-	(void)draw_map(game);
+	draw_map(game);
 	SDL_RenderPresent(game->win->ren);
 }

@@ -17,6 +17,9 @@ int	main(int ac, char **av)
 {
 	t_game *game;
 	int quit;
+	int	oldTime;
+	int	currTime;
+	float	frameTime;
 
 	if (ac != 2)
 		return (0);
@@ -27,9 +30,14 @@ int	main(int ac, char **av)
 	quit = 0;
 	while(!quit)
 	{
+		oldTime = currTime;
+		currTime = SDL_GetTicks();
+		frameTime = (currTime - oldTime) / 1000.0;
 		quit = handle_input(game);
 		updateState(game);
 		renderState(game);
+		game->plr->rs = frameTime * 10.0;
+		game->plr->ms = frameTime * 10.0;
 	}
 	return (0);
 }

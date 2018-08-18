@@ -29,9 +29,10 @@ t_game	*init_game(void)
 	game->plr->y = 10;
 	game->plr->vx = 0;
 	game->plr->vy = 0;
-	game->plr->dir = -1;
-	game->plr->vdir = 0;
-	game->plr->s = 1;
+	game->plr->dirx = 1;
+	game->plr->diry = 1;
+	game->plr->sx = 0;
+	game->plr->sy = 0.66;
 
 	game->map = (t_map *)malloc(sizeof(t_map));
 

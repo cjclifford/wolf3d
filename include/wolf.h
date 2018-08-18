@@ -48,15 +48,20 @@ typedef struct
 	float	vx;
 	float	vy;
 	
-	float	dir;
-	float	vdir;
+	float	dirx;
+	float	diry;
 
-	float	s;
+	float	sx;
+	float	sy;
+
+	float	rs;
+	float	ms;
 }	t_player;
 
 typedef struct
 {
-	float	dir;
+	float	dirx;
+	float	diry;
 
 	float	ix;
 	float	iy;

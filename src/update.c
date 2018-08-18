@@ -15,16 +15,7 @@
 void	updateState(t_game *game)
 {
 	int	i;
-	
-	if (game->map->map[(int)game->plr->y][(int)(cos(game->plr->dir) * 0.1f + game->plr->x)] == 0)
-		game->plr->x += game->plr->vx;
-	if (game->map->map[(int)(sin(game->plr->dir) * 0.1f + game->plr->y)][(int)game->plr->x] == 0)
-		game->plr->y += game->plr->vy;
-	game->plr->dir += game->plr->vdir;
-	if (game->plr->dir <= 0)
-		game->plr->dir = 2 * M_PI + game->plr->dir;
-	else if (game->plr->dir > 2 * M_PI)
-		game->plr->dir = 0;
+
 	SDL_SetRenderDrawColor(game->win->ren, 0, 0, 0, 255);
 	SDL_RenderClear(game->win->ren);
 	SDL_SetRenderDrawColor(game->win->ren, 56, 56, 56, 255);
