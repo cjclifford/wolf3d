@@ -6,7 +6,7 @@
 /*   By: ccliffor <ccliffor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/13 10:29:12 by ccliffor          #+#    #+#             */
-/*   Updated: 2018/08/17 15:20:03 by ccliffor         ###   ########.fr       */
+/*   Updated: 2018/08/20 17:58:13 by ccliffor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,6 @@ int	main(int ac, char **av)
 {
 	t_game *game;
 	int quit;
-	int	oldTime;
-	int	currTime;
-	float	frameTime;
 
 	if (ac != 2)
 		return (0);
@@ -30,14 +27,11 @@ int	main(int ac, char **av)
 	quit = 0;
 	while(!quit)
 	{
-		oldTime = currTime;
-		currTime = SDL_GetTicks();
-		frameTime = (currTime - oldTime) / 1000.0;
 		quit = handle_input(game);
 		updateState(game);
 		renderState(game);
-		game->plr->rs = frameTime * 10.0;
-		game->plr->ms = frameTime * 10.0;
+		game->plr->rs = 5 * (M_PI / 180.0);
+		game->plr->ms = 0.01;
 	}
 	return (0);
 }

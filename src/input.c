@@ -6,7 +6,7 @@
 /*   By: ccliffor <ccliffor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/14 11:09:04 by ccliffor          #+#    #+#             */
-/*   Updated: 2018/08/17 16:11:14 by ccliffor         ###   ########.fr       */
+/*   Updated: 2018/08/20 17:42:47 by ccliffor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 int	handle_input(t_game *game)
 {
 	SDL_Event	e;
-	int			oldDirX;
-	int			oldScreenX;
+	float		oldDirX;
+	float		oldScreenX;
 
 	while (SDL_PollEvent(&e) != 0)
 	{
@@ -28,17 +28,13 @@ int	handle_input(t_game *game)
 				return (1);
 			if (e.key.keysym.sym == SDLK_UP)
 			{
-				if (game->map->map[(int)game->plr->y][(int)(game->plr->x + game->plr->dirx * game->plr->ms)] == 0)
-					game->plr->x += game->plr->dirx * game->plr->ms;
-				if (game->map->map[(int)(game->plr->y + game->plr->diry * game->plr->ms)][(int)game->plr->x] == 0)
-					game->plr->y += game->plr->diry * game->plr->ms;
+				game->plr->vx = game->plr->dirx * game->plr->ms;
+				game->plr->vy = game->plr->diry * game->plr->ms;
 			}
 			if (e.key.keysym.sym == SDLK_DOWN)
 			{
-				if (game->map->map[(int)game->plr->y][(int)(game->plr->x - game->plr->dirx * game->plr->ms)] == 0)
-					game->plr->x -= game->plr->dirx * game->plr->ms;
-				if (game->map->map[(int)(game->plr->y - game->plr->diry * game->plr->ms)][(int)game->plr->x] == 0)
-					game->plr->y -= game->plr->diry * game->plr->ms;
+				game->plr->vx = -game->plr->dirx * game->plr->ms;
+				game->plr->vy = -game->plr->diry * game->plr->ms;
 			}
 			if (e.key.keysym.sym == SDLK_LEFT)
 			{
@@ -58,6 +54,11 @@ int	handle_input(t_game *game)
 				game->plr->sx = game->plr->sx * cos(game->plr->rs) - game->plr->sy * sin(game->plr->rs);
 				game->plr->sy = oldScreenX * sin(game->plr->rs) + game->plr->sy * cos(game->plr->rs);
 			}
+			// if (e.key.keysym.sym == SDLK_MINUS)
+			// {
+			// 	game->plr->sx += 0.1
+			// }
+			// printf("%f %f | %f %f\n", game->plr->dirx, game->plr->diry, game->plr->sx, game->plr->sy);
 		}
 		else if (e.type == SDL_KEYUP)
 		{
@@ -71,8 +72,16 @@ int	handle_input(t_game *game)
 				game->plr->vx = 0;
 				game->plr->vy = 0;
 			}
-			// if (e.key.keysym.sym == SDLK_LEFT)
-			// if (e.key.keysym.sym == SDLK_RIGHT)
+			if (e.key.keysym.sym == SDLK_LEFT)
+			{
+				// game->plr->vdirx = 0;
+				// game->plr->vdiry = 0;
+			}
+			if (e.key.keysym.sym == SDLK_RIGHT)
+			{
+				// game->plr->vdirx = 0;
+				// game->plr->vdiry = 0;
+			}
 		}
 	}
 	return (0);

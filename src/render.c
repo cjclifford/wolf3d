@@ -6,18 +6,34 @@
 /*   By: ccliffor <ccliffor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/14 11:58:44 by ccliffor          #+#    #+#             */
-/*   Updated: 2018/08/17 18:03:54 by ccliffor         ###   ########.fr       */
+/*   Updated: 2018/08/20 18:07:33 by ccliffor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
 
-static void	drawMapPosition(t_game *game, float x1, float y1)
+static void	drawMapPosition(t_game *game, float x1, float y1, float scale)
 {
-	int x2 = game->plr->dirx * 6 + x1;
-	int y2 = game->plr->diry * 6 + y1;
+	x1 *= scale;
+	y1 *= scale;
+	float x2 = game->plr->dirx * scale + x1;
+	float y2 = game->plr->diry * scale + y1;
 	SDL_SetRenderDrawColor(game->win->ren, 255, 255, 255, 255);
 	SDL_RenderDrawLine(game->win->ren, x1, y1, x2, y2);
+	// SDL_SetRenderDrawColor(game->win->ren, 255, 0, 0, 255);
+	// SDL_RenderDrawLine(game->win->ren, 
+	// 	x1, 
+	// 	y1, 
+	// 	(game->plr->dirx * scale + x1) + game->plr->sx * (2 * 0 / (float)game->win->w -1), 
+	// 	(game->plr->diry * scale + y1) + game->plr->sy * (2 * 0 / (float)game->win->w -1)
+	// );
+	// SDL_SetRenderDrawColor(game->win->ren, 0, 255, 0, 255);
+	// SDL_RenderDrawLine(game->win->ren, 
+	// 	x1, 
+	// 	y1, 
+	// 	(game->plr->dirx * scale + x1) + game->plr->sx * (2 * (game->win->w - 1) / (float)game->win->w -1), 
+	// 	(game->plr->diry * scale + y1) + game->plr->sy * (2 * (game->win->w - 1) / (float)game->win->w -1)
+	// );
 }
 
 static void	draw_map(t_game *game)
@@ -59,18 +75,21 @@ static void	draw_map(t_game *game)
 		}
 		i++;
 	}
-	SDL_SetRenderDrawColor(game->win->ren, 255, 255, 255, 255);
-	drawMapPosition(game, game->plr->x * scale, game->plr->y * scale);
+	drawMapPosition(game, game->plr->x, game->plr->y, scale);
 }
 
 void		renderState(t_game *game)
 {
+	// draw_map(game);
+	// SDL_RenderPresent(game->win->ren);
+	// return ;
 	int		x;
 	int		hit;
 	int		side;
 	int		wallHeight;
 	int		wallStart;
 	int		wallEnd;
+	float	cameraX;
 	SDL_Colour	colour;
 
 	//raycasting loop
@@ -81,8 +100,19 @@ void		renderState(t_game *game)
 		game->plr->ix = (int)game->plr->x;
 		game->plr->iy = (int)game->plr->y;
 		// get ray direction
-		game->ray->dirx = game->plr->dirx + game->plr->sx * (2 * x / (float)game->win->w - 1);
-		game->ray->diry = game->plr->diry + game->plr->sy * (2 * x / (float)game->win->w - 1);
+		cameraX = 2 * x / (float)game->win->w - 1;
+		game->ray->dirx = game->plr->dirx + game->plr->sx * cameraX;
+		game->ray->diry = game->plr->diry + game->plr->sy * cameraX;
+		if (x == 0 || x == 1)
+		{
+			SDL_SetRenderDrawColor(game->win->ren, 200, 0, 0, 255);
+			SDL_RenderDrawLine(game->win->ren, game->plr->x * 6, game->plr->y * 6, game->plr->x * 6 + game->ray->dirx * 20, game->plr->y * 6 + game->ray->diry * 20);
+		}
+		else if (x + 1 >= game->win->w)
+		{
+			SDL_SetRenderDrawColor(game->win->ren, 0, 200, 0, 255);
+			SDL_RenderDrawLine(game->win->ren, game->plr->x * 6, game->plr->y * 6, game->plr->x * 6 + game->ray->dirx * 20, game->plr->y * 6 + game->ray->diry * 20);
+		}
 		// get delta distance
 		game->ray->dx = fabs(1.0 / game->ray->dirx);
 		game->ray->dy = fabs(1.0 / game->ray->diry);
@@ -111,10 +141,6 @@ void		renderState(t_game *game)
 		hit = 0;
 		while (!hit)
 		{
-			// if (game->ray->ix > game->map->sx || game->ray->ix < 0)
-			// 	break ;
-			// if (game->ray->iy > game->map->sy || game->ray->iy < 0)
-			// 	break ;
 			if (game->ray->ix < game->ray->iy)
 			{
 				game->ray->ix += game->ray->dx;
@@ -189,5 +215,5 @@ void		renderState(t_game *game)
 		x++;
 	}
 	draw_map(game);
-	SDL_RenderPresent(game->win->ren);
+		SDL_RenderPresent(game->win->ren);
 }
