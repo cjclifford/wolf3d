@@ -6,7 +6,7 @@
 #    By: ccliffor <ccliffor@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/08/13 12:10:37 by ccliffor          #+#    #+#              #
-#    Updated: 2018/08/24 11:49:52 by ccliffor         ###   ########.fr        #
+#    Updated: 2018/08/24 12:35:09 by ccliffor         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,6 @@ SOURCES		= main.c read.c input.c init.c update.c render.c
 SRCS		= $(SOURCES:%=src/%)
 SDL2_CONFIG	= SDL2/bin/sdl2-config
 SDL2_SRCS	= SDL2-2.0.8
-SDL2_TARBALL= $(SDL2_SRCS).tar.gz
 
 ## Compiling, lib, flags
 INCLUDE	= include/
@@ -37,13 +36,7 @@ COLOUR_GREEN	= \033[00;32m
 all: $(NAME)
 
 # Core program
-$(SDL2_TARBALL):
-	git clone https://github.com/davidsiaw/SDL2.git $(SDL2_SRCS)
-
-$(SDL2_SRCS): $(SDL2_TARBALL)
-	tar -xvzf $(SDL2_SRCS).tar.gz
-
-$(SDL2_CONFIG): $(SDL2_SRCS)
+$(SDL2_CONFIG):
 	cd $(SDL2_SRCS);\
 	mkdir -p build;\
 	cd build;\
@@ -57,10 +50,13 @@ $(NAME): $(SDL2_CONFIG) $(SRCS) $(HEADERS)
 
 # General rules
 clean:
+	@echo "No objects to clean"
+
+fclean:
 	@rm -f $(NAME)
 	@echo "$(COLOUR_CYAN)$(NAME) \t\t-- $(COLOUR_GREEN)EXECUTABLE REMOVED$(COLOUR_CLEAR)"
 
-re: clean all
+re: fclean all
 
 run: re
 		@./wolf3d maps/01.wolf
