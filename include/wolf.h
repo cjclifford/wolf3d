@@ -6,7 +6,7 @@
 /*   By: ccliffor <ccliffor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/13 10:49:40 by ccliffor          #+#    #+#             */
-/*   Updated: 2018/08/20 13:25:37 by ccliffor         ###   ########.fr       */
+/*   Updated: 2018/08/23 13:55:12 by ccliffor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,25 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <unistd.h>
-# include <stdio.h>
 
-typedef struct
+typedef struct	s_window
 {
 	SDL_Window		*win;
 	SDL_Renderer	*ren;
-	
+
 	int				w;
 	int				h;
-}	t_window;
+}				t_window;
 
-typedef struct
+typedef struct	s_map
 {
 	int	**map;
-	
+
 	int	sx;
 	int	sy;
-}	t_map;
+}				t_map;
 
-typedef struct
+typedef struct	s_player
 {
 	float	x;
 	float	y;
@@ -45,9 +44,6 @@ typedef struct
 	int		ix;
 	int		iy;
 
-	float	vx;
-	float	vy;
-	
 	float	dirx;
 	float	diry;
 
@@ -56,9 +52,9 @@ typedef struct
 
 	float	rs;
 	float	ms;
-}	t_player;
+}				t_player;
 
-typedef struct
+typedef struct	s_ray
 {
 	float	dirx;
 	float	diry;
@@ -73,25 +69,39 @@ typedef struct
 	float	sy;
 
 	float	p;
-}	t_ray;
+}				t_ray;
 
-typedef	struct
+typedef	struct	s_input
 {
+	int	key_up;
+	int	key_down;
+	int	key_left;
+	int	key_right;
+	int	key_lshift;
+}				t_input;
+
+typedef	struct	s_game
+{
+	int			curr_time;
+	int			old_time;
+	float		frame_time;
+
 	t_window	*win;
 	t_map		*map;
 	t_player	*plr;
 	t_ray		*ray;
-}	t_game;
+	t_input		*input;
+}				t_game;
 
-int		get_map_dimensions(t_game *game, char *file);
-void	get_map_data(t_game *game, char *file);
+int				get_map(t_game *game, char *file);
 
-t_game	*init_game(void);
-int		handle_input(t_game *game);
+t_game			*init_game(void);
+int				handle_input(t_game *game);
 
-void	updateState(t_game *game);
-void	renderState(t_game *game);
+void			update_state(t_game *game);
+void			render_state(t_game *game);
 
-float	map(float value, float istart, float istop, float ostart, float ostop);
+void			get_map_data(t_game *game, char *file);
+int				get_map_dimensions(t_game *game, char *file);
 
 #endif
