@@ -6,7 +6,7 @@
 /*   By: ccliffor <ccliffor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/13 10:29:12 by ccliffor          #+#    #+#             */
-/*   Updated: 2018/08/23 13:51:58 by ccliffor         ###   ########.fr       */
+/*   Updated: 2018/08/27 09:53:17 by ccliffor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	frame_calc(t_game *game)
 
 static int	load_error(void)
 {
-	ft_putendl("Error loading map.");
+	ft_putendl("Map not found.");
 	return (0);
 }
 

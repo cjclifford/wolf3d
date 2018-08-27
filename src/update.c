@@ -6,7 +6,7 @@
 /*   By: ccliffor <ccliffor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/14 11:57:02 by ccliffor          #+#    #+#             */
-/*   Updated: 2018/08/23 13:49:53 by ccliffor         ###   ########.fr       */
+/*   Updated: 2018/08/27 10:10:42 by ccliffor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,31 @@
 
 static void	move_forward(t_game *game)
 {
-	if (game->map->map[(int)(game->plr->y + game->plr->diry *
-			game->plr->ms)][(int)game->plr->x] == 0)
+	float	new_x;
+	float	new_y;
+
+	new_x = game->plr->x + game->plr->dirx * game->plr->ms;
+	new_y = game->plr->y + game->plr->diry * game->plr->ms;
+	if (game->map->map[(int)(new_y)][(int)game->plr->x] == 0
+			&& new_y < game->map->sy - 1 && new_y - 1 > 0)
 		game->plr->y += game->plr->diry * game->plr->ms;
-	if (game->map->map[(int)game->plr->y][(int)(game->plr->x +
-			game->plr->dirx * game->plr->ms)] == 0)
+	if (game->map->map[(int)game->plr->y][(int)(new_x)] == 0
+			&& new_x < game->map->sx - 1 && new_x - 1 > 0)
 		game->plr->x += game->plr->dirx * game->plr->ms;
 }
 
 static void	move_back(t_game *game)
 {
-	if (game->map->map[(int)(game->plr->y - game->plr->diry *
-			game->plr->ms)][(int)game->plr->x] == 0)
+	float	new_x;
+	float	new_y;
+
+	new_x = game->plr->x - game->plr->dirx * game->plr->ms;
+	new_y = game->plr->y - game->plr->diry * game->plr->ms;
+	if (game->map->map[(int)(new_y)][(int)game->plr->x] == 0
+			&& new_y < game->map->sy - 1 && new_y - 1 > 0)
 		game->plr->y -= game->plr->diry * game->plr->ms;
-	if (game->map->map[(int)game->plr->y][(int)(game->plr->x -
-			game->plr->dirx * game->plr->ms)] == 0)
+	if (game->map->map[(int)game->plr->y][(int)(new_x)] == 0
+			&& new_x < game->map->sx - 1 && new_x - 1 > 0)
 		game->plr->x -= game->plr->dirx * game->plr->ms;
 }
 
@@ -83,9 +93,9 @@ void		update_state(t_game *game)
 		look_left(game);
 	if (game->input->key_right)
 		look_right(game);
-	SDL_SetRenderDrawColor(game->win->ren, 113, 113, 113, 255);
+	SDL_SetRenderDrawColor(game->win->ren, 46, 169, 22, 255);
 	SDL_RenderClear(game->win->ren);
-	SDL_SetRenderDrawColor(game->win->ren, 56, 56, 56, 255);
+	SDL_SetRenderDrawColor(game->win->ren, 27, 111, 217, 255);
 	i = 0;
 	while (i < game->win->h / 2)
 	{
