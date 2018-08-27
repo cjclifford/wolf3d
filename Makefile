@@ -6,7 +6,7 @@
 #    By: ccliffor <ccliffor@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/08/13 12:10:37 by ccliffor          #+#    #+#              #
-#    Updated: 2018/08/24 12:35:09 by ccliffor         ###   ########.fr        #
+#    Updated: 2018/08/27 11:00:36 by ccliffor         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,11 +18,12 @@ SDL2_CONFIG	= SDL2/bin/sdl2-config
 SDL2_SRCS	= SDL2-2.0.8
 
 ## Compiling, lib, flags
-INCLUDE	= include/
-HEADERS	= $(INCLUDE)wolf.h
+INCLUDE	= include
+LIB		= libft
+HEADERS	= $(INCLUDE)/wolf.h
 WFLAGS	= -Wall -Werror -Wextra
 CC		= clang
-CFLAGS	= $(WFLAGS) -I $(INCLUDE) libft/libft.a
+CFLAGS	= $(WFLAGS) -I $(INCLUDE) $(LIB)/libft.a
 
 ## Colours
 
@@ -37,13 +38,15 @@ all: $(NAME)
 
 # Core program
 $(SDL2_CONFIG):
+	git clone https://github.com/cjclifford/libft.git $(LIB);\
+	git clone https://github.com/spurious/SDL-mirror.git $(SDL2_SRCS);\
 	cd $(SDL2_SRCS);\
 	mkdir -p build;\
 	cd build;\
 	../configure --prefix=$(CURDIR)/SDL2;\
 	make -j6; make install
 
-$(NAME): $(SDL2_CONFIG) $(SRCS) $(HEADERS)
+$(NAME): $(SDL2_CONFIG) $(LIB) $(SRCS) $(HEADERS)
 	@make -C libft
 	@$(CC) $(CFLAGS) $(SRCS) -o $@ $(shell ./$(SDL2_CONFIG) --cflags --libs)
 	@echo "$(COLOUR_CYAN)$(NAME) \t\t-- $(COLOUR_GREEN)EXECUTABLE COMPILED$(COLOUR_CLEAR)\n"
