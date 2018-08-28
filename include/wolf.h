@@ -6,7 +6,7 @@
 /*   By: ccliffor <ccliffor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/13 10:49:40 by ccliffor          #+#    #+#             */
-/*   Updated: 2018/08/23 13:55:12 by ccliffor         ###   ########.fr       */
+/*   Updated: 2018/08/28 10:54:28 by ccliffor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <unistd.h>
+
+# define WRONG_LINE 1
+# define NO_DATA 2
+# define MAP_ERROR 3
+# define NO_FILE 4
 
 typedef struct	s_window
 {
@@ -103,5 +108,7 @@ void			render_state(t_game *game);
 
 void			get_map_data(t_game *game, char *file);
 int				get_map_dimensions(t_game *game, char *file);
+
+int				ret_err(int error);
 
 #endif

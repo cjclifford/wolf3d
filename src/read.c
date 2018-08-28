@@ -6,31 +6,11 @@
 /*   By: ccliffor <ccliffor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/13 10:56:23 by ccliffor          #+#    #+#             */
-/*   Updated: 2018/08/23 13:24:27 by ccliffor         ###   ########.fr       */
+/*   Updated: 2018/08/28 10:52:41 by ccliffor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf.h"
-
-static int	error(int i)
-{
-	if (i == 1)
-	{
-		ft_putendl("Found wrong line length. Exiting");
-		return (0);
-	}
-	else if (i == 2)
-	{
-		ft_putendl("No data.");
-		return (0);
-	}
-	else if (i == 3)
-	{
-		ft_putendl("Map not found.");
-		return (0);
-	}
-	return (1);
-}
 
 int			get_map_dimensions(t_game *game, char *file)
 {
@@ -40,8 +20,7 @@ int			get_map_dimensions(t_game *game, char *file)
 	char	**list;
 
 	fd = open(file, O_RDONLY);
-	game->map->sy = 0;
-	while (get_next_line(fd, &line) > 0)
+	while ((i = get_next_line(fd, &line)) > 0)
 	{
 		list = ft_strsplit(line, ' ');
 		free(line);
@@ -49,15 +28,16 @@ int			get_map_dimensions(t_game *game, char *file)
 		while (list[i])
 			free(list[i++]);
 		free(list);
-		if (game->map->sy == 0)
+		if (game->map->sy++ == 0)
 			game->map->sx = i;
 		if (i < game->map->sx)
-			return (error(1));
-		game->map->sy++;
+			return (ret_err(WRONG_LINE));
 	}
+	if (i < 0)
+		return (ret_err(MAP_ERROR));
 	free(line);
 	close(fd);
-	return (error((game->map->sx == 0) * 2));
+	return ((ret_err((game->map->sx == 0) * 2)));
 }
 
 static void	create_map(t_game *game)

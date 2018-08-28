@@ -6,13 +6,13 @@
 #    By: ccliffor <ccliffor@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/08/13 12:10:37 by ccliffor          #+#    #+#              #
-#    Updated: 2018/08/27 11:00:36 by ccliffor         ###   ########.fr        #
+#    Updated: 2018/08/28 10:40:57 by ccliffor         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # PROGRAM #
 NAME		= wolf3d
-SOURCES		= main.c read.c input.c init.c update.c render.c
+SOURCES		= main.c read.c input.c init.c update.c render.c error.c
 SRCS		= $(SOURCES:%=src/%)
 SDL2_CONFIG	= SDL2/bin/sdl2-config
 SDL2_SRCS	= SDL2-2.0.8

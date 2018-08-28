@@ -6,7 +6,7 @@
 /*   By: ccliffor <ccliffor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/14 11:05:43 by ccliffor          #+#    #+#             */
-/*   Updated: 2018/08/27 09:49:42 by ccliffor         ###   ########.fr       */
+/*   Updated: 2018/08/28 10:43:55 by ccliffor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ t_game	*init_game(void)
 	game->plr->sx = -0.66;
 	game->plr->sy = 0.66;
 	game->map = (t_map *)malloc(sizeof(t_map));
+	game->map->sx = 0;
+	game->map->sy = 0;
 	game->ray = (t_ray *)malloc(sizeof(t_ray));
 	game->input = (t_input *)malloc(sizeof(t_input));
 	game->input->key_up = 0;
